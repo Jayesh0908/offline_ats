@@ -1,93 +1,246 @@
-# Offline_ATS
+# 📋 Offline ATS (Applicant Tracking System)
 
+An **offline-first** AI-powered Applicant Tracking System that processes resumes, extracts structured candidate information using local AI models, and ranks candidates based on job description relevance. **No external APIs required** — everything runs locally on your CPU.
 
+---
 
-## Getting started
+## 🚀 Features
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+- ✅ **100% Offline** — No internet required after initial setup
+- ✅ **CPU-only Inference** — Runs on any modern laptop/desktop
+- ✅ **Multiple Resume Formats** — Supports PDF, PNG, JPG
+- ✅ **Local LLM Parsing** — Uses Phi-3 Mini or Qwen2.5 via Ollama/llama.cpp
+- ✅ **Smart Candidate Ranking** — Combines embedding similarity + skill matching
+- ✅ **Semantic Search** — Search candidates using natural language
+- ✅ **SQLite Storage** — Persistent local database with FTS5 full-text search
+- ✅ **Beautiful UI** — Streamlit-based interface
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+---
 
-## Add your files
-
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+## 📁 Project Structure
 
 ```
-cd existing_repo
-git remote add origin https://code.swecha.org/Jayesh2026/offline_ats.git
-git branch -M main
-git push -uf origin main
+offline_ats/
+├── app.py                      # Main Streamlit application
+├── config.py                   # Configuration settings
+├── requirements.txt            # Python dependencies
+├── database/
+│   ├── __init__.py
+│   └── db.py                   # SQLite database operations
+├── extraction/
+│   ├── __init__.py
+│   └── text_extractor.py       # PDF (PyMuPDF) & Image (OCR) text extraction
+├── llm/
+│   ├── __init__.py
+│   └── local_llm.py            # Local LLM interface for resume parsing
+├── embeddings/
+│   ├── __init__.py
+│   └── embedder.py             # sentence-transformers embeddings
+├── matching/
+│   ├── __init__.py
+│   └── matcher.py              # Candidate ranking & search logic
+├── utils/
+│   └── __init__.py
+├── uploaded_resumes/           # Uploaded resume files stored here
+├── models/                     # GGUF models & sentence-transformers cache
+└── database/ats.db             # SQLite database (auto-created)
 ```
 
-## Integrate with your tools
+---
 
-* [Set up project integrations](https://code.swecha.org/Jayesh2026/offline_ats/-/settings/integrations)
+## 🛠️ Installation
 
-## Collaborate with your team
+### Step 1: Install Python Dependencies
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+```bash
+pip install -r requirements.txt
+```
 
-## Test and Deploy
+### Step 2: Install Tesseract OCR
 
-Use the built-in continuous integration in GitLab.
+**Windows:**
+- Download installer from [UB-Mannheim/tesseract](https://github.com/UB-Mannheim/tesseract/wiki)
+- Install and note the installation path (default: `C:\Program Files\Tesseract-OCR\tesseract.exe`)
+- Update `TESSERACT_CMD` in `config.py` if needed
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
+**Ubuntu/Debian:**
+```bash
+sudo apt-get install tesseract-ocr
+```
 
-***
+**macOS:**
+```bash
+brew install tesseract
+```
 
-# Editing this README
+### Step 3: Install Local LLM (Choose One)
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+#### Option A: Ollama (Recommended - Easier)
 
-## Suggestions for a good README
+1. Download and install [Ollama](https://ollama.com/)
+2. Pull a model:
+   ```bash
+   ollama pull phi3:mini
+   # OR
+   ollama pull qwen2.5:1.5b
+   ```
+3. Ensure `config.py` has the correct model name
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+#### Option B: llama.cpp (Direct GGUF)
 
-## Name
-Choose a self-explaining name for your project.
+1. Download a GGUF model:
+   - [Phi-3-mini-4k-instruct-q4.gguf](https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-gguf)
+   - Place it in the `models/` directory
+2. Install [llama.cpp](https://github.com/ggerganov/llama.cpp) and ensure `llama-cli` is in your PATH
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+### Step 4: Verify Tesseract Path
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+Update `TESSERACT_CMD` in `config.py` to match your Tesseract installation:
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+```python
+TESSERACT_CMD = r"C:\Program Files\Tesseract-OCR\tesseract.exe"  # Windows default
+# TESSERACT_CMD = "/usr/bin/tesseract"  # Linux
+# TESSERACT_CMD = "/opt/homebrew/bin/tesseract"  # macOS ARM
+```
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+---
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+## 🏃 Running the Application
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+```bash
+streamlit run app.py
+```
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+The app will open in your browser at `http://localhost:8501`.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+---
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+## 📖 Usage Guide
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+### 1. Upload Resumes
+- Go to the **Upload Resumes** tab
+- Select one or more PDF/PNG/JPG files
+- Click **Process All Resumes**
+- The app will:
+  1. Extract text (PyMuPDF for PDFs, Tesseract OCR for images)
+  2. Parse with local LLM → Structured JSON
+  3. Generate embeddings (all-MiniLM-L6-v2)
+  4. Store everything in SQLite
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+### 2. View Database
+- See all stored candidates
+- View parsed details (skills, education, experience)
+- Export data as JSON
+- Delete individual or all candidates
 
-## License
-For open source projects, say how it is licensed.
+### 3. Rank Candidates
+- Enter a job description
+- The system computes:
+  - **Embedding Similarity** (cosine similarity between JD and resume embeddings)
+  - **Skill Match** (what percentage of required skills match)
+  - **Final Score** = `0.6 × Embedding + 0.4 × Skill Match`
+- Results are sorted by final score descending
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+### 4. Search Candidates
+- **Semantic Search** — Uses embedding similarity to find relevant candidates
+- **Keyword Search** — Uses SQLite FTS5 for exact keyword matching
+- **Hybrid** — Combines both methods
+
+---
+
+## ⚙️ Configuration
+
+Edit `config.py` to customize:
+
+| Setting | Description | Default |
+|---------|-------------|---------|
+| `LLM_MODEL` | LLM backend ("phi3" or "qwen2.5") | `"phi3"` |
+| `OLLAMA_MODEL` | Ollama model name | `"phi3:mini"` |
+| `EMBEDDING_MODEL` | sentence-transformers model | `"all-MiniLM-L6-v2"` |
+| `EMBEDDING_WEIGHT` | Weight for embedding similarity in scoring | `0.6` |
+| `SKILL_MATCH_WEIGHT` | Weight for skill match in scoring | `0.4` |
+| `TESSERACT_CMD` | Path to Tesseract executable | Windows default |
+
+---
+
+## 🔧 How It Works
+
+```
+Upload Resumes (PDF/PNG/JPG)
+        ↓
+Extract Text (PyMuPDF / Tesseract OCR)
+        ↓
+Local LLM Parsing → Structured JSON
+        ↓
+Store in SQLite + Generate Embeddings
+        ↓
+User enters Job Description
+        ↓
+Compute Similarity Scores
+        ↓
+Rank & Display Candidates
+```
+
+### Scoring Formula
+
+```
+Final Score = 0.6 × Embedding Similarity + 0.4 × Skill Match Score
+```
+
+- **Embedding Similarity**: Cosine similarity between JD and resume embeddings (0 to 1)
+- **Skill Match**: Percentage of required skills found in candidate's skills (0 to 1)
+
+---
+
+## 🧠 Models Used
+
+| Purpose | Model | Size |
+|---------|-------|------|
+| Resume Parsing | Phi-3 Mini (3.8B) / Qwen2.5 1.5B | ~2-4 GB GGUF |
+| Text Embeddings | all-MiniLM-L6-v2 | ~80 MB |
+| PDF Text Extraction | PyMuPDF | — |
+| OCR | Tesseract OCR | — |
+
+---
+
+## 📊 Requirements
+
+- **Python** 3.10+
+- **RAM**: 8 GB+ (16 GB recommended for LLM)
+- **Disk**: ~5 GB for models
+- **OS**: Windows, macOS, or Linux
+
+---
+
+## 🔒 Privacy
+
+This application is **100% offline**. All processing happens on your local machine:
+- ✅ No data sent to external servers
+- ✅ No API keys required
+- ✅ No internet needed after initial setup
+- ✅ All candidate data stays in local SQLite database
+
+---
+
+## 🐛 Troubleshooting
+
+**LLM not responding:**
+- Ensure Ollama is running (`ollama serve`)
+- Check the model is downloaded (`ollama list`)
+- Verify `OLLAMA_MODEL` in `config.py`
+
+**OCR not working:**
+- Verify Tesseract is installed
+- Update `TESSERACT_CMD` in `config.py`
+- Test with: `pytesseract.image_to_string(Image.open("test.png"))`
+
+**Embedding model download fails:**
+- The model downloads once on first run (~80 MB)
+- Ensure internet access for initial download
+- After download, it's cached locally
+
+---
+
+## 📝 License
+
+MIT License — feel free to use, modify, and distribute.

@@ -1,0 +1,26 @@
+# Offline ATS Dependencies
+# Install with: pip install -r requirements.txt
+
+# Web Framework
+streamlit>=1.28.0
+
+# PDF Text Extraction
+PyMuPDF>=1.23.0
+
+# OCR for Images
+pytesseract>=0.3.10
+Pillow>=10.0.0
+
+# Local LLM (Ollama client)
+requests>=2.31.0
+
+# Embeddings
+sentence-transformers>=2.2.0
+
+# Database
+numpy>=1.24.0
+
+# Tesseract OCR (system dependency)
+# On Windows: Download installer from https://github.com/UB-Mannheim/tesseract/wiki
+# On Ubuntu/Debian: sudo apt-get install tesseract-ocr
+# On macOS: brew install tesseract
