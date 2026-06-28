@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Offline ATS Dependencies
 # Install with: pip install -r requirements.txt
 
@@ -24,3 +25,24 @@ numpy>=1.24.0
 # On Windows: Download installer from https://github.com/UB-Mannheim/tesseract/wiki
 # On Ubuntu/Debian: sudo apt-get install tesseract-ocr
 # On macOS: brew install tesseract
+=======
+# Core UI
+streamlit>=1.35.0
+
+# PDF Text Extraction
+PyMuPDF>=1.24.0
+
+# Image OCR
+pytesseract>=0.3.10
+Pillow>=10.0.0
+
+# Local LLM (GGUF inference)
+llama-cpp-python>=0.2.0
+
+# Local Embeddings
+sentence-transformers>=3.0.0
+
+# Vector Math & Similarity
+scikit-learn>=1.4.0
+numpy>=1.26.0
+>>>>>>> 7ae9a8a478eb985e8ef5c6c9eba5787b4ddcfbd9

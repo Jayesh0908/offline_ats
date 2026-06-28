@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+<<<<<<< HEAD
 *.so
 *.egg-info/
 dist/
@@ -24,6 +25,39 @@ uploaded_resumes/*
 # Model files
 models/*.gguf
 models/sentence_transformers/
+=======
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Models (large binary files - download separately)
+models/
+*.gguf
+*.bin
+*.safetensors
+
+# Database & uploads
+data/
+uploads/
+*.db
+*.sqlite
+*.sqlite3
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+>>>>>>> 7ae9a8a478eb985e8ef5c6c9eba5787b4ddcfbd9
 
 # IDE
 .vscode/
@@ -32,9 +66,23 @@ models/sentence_transformers/
 *.swo
 *~
 
+<<<<<<< HEAD
 # OS
 .DS_Store
 Thumbs.db
 
 # Streamlit
 .streamlit/
+=======
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Sentence-transformers cache
+sentence_transformers_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+>>>>>>> 7ae9a8a478eb985e8ef5c6c9eba5787b4ddcfbd9
