@@ -1,35 +1,33 @@
-# Offline ATS — Python Dependencies
+# Offline ATS - Python Dependencies
 # Install with: pip install -r requirements.txt
 
-# ── Web Framework ──────────────────────────────────────────────────────────────
+# Web Framework
 streamlit>=1.35.0
 
-# ── PDF Text Extraction ────────────────────────────────────────────────────────
+# PDF Text Extraction
 PyMuPDF>=1.24.0
 
-# ── OCR for Image Resumes ─────────────────────────────────────────────────────
+# OCR for Image Resumes
 pytesseract>=0.3.10
 Pillow>=10.0.0
 
-# ── Local LLM (GGUF — CPU inference via llama.cpp) ───────────────────────────
+# Local LLM (GGUF CPU inference via llama.cpp)
 llama-cpp-python>=0.2.0
 
-# ── Local Embeddings ──────────────────────────────────────────────────────────
+# HTTP client for Ollama/API mode
+requests>=2.31.0
+
+# Local Embeddings
 sentence-transformers>=3.0.0
 
-# ── Vector Math & Similarity ──────────────────────────────────────────────────
+# Vector Math & Similarity
 scikit-learn>=1.4.0
 numpy>=1.26.0
 
-# ── HTTP (optional — used if Ollama mode is enabled in config) ─────────────────
-requests>=2.31.0
-
-# ── System Notes ───────────────────────────────────────────────────────────────
+# System notes:
 # Tesseract OCR must be installed separately:
-#   Windows : https://github.com/UB-Mannheim/tesseract/wiki
-#   Ubuntu  : sudo apt-get install tesseract-ocr
-#   macOS   : brew install tesseract
+#   Windows: https://github.com/UB-Mannheim/tesseract/wiki
+#   Ubuntu: sudo apt-get install tesseract-ocr
+#   macOS: brew install tesseract
 #
-# GGUF model must be downloaded separately and placed in models/:
-#   Phi-3 Mini : https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-gguf
-#   Qwen2.5-1.5B: https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF
+# GGUF models must be downloaded separately and placed in models/.
