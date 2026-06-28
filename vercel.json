@@ -13,6 +13,5 @@
         { "key": "Service-Worker-Allowed", "value": "/" }
       ]
     }
-  ],
-  "excludeFiles": "**/*.py"
+  ]
 }
