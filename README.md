@@ -135,6 +135,43 @@ The default APK URL can be changed during CI with `ATS_SERVER_URL` on GitLab or 
 
 ---
 
+## 💻 CLI Version
+
+The project also includes a command-line build for offline terminal submission.
+
+Initialize the local database:
+
+```bash
+python cli.py init
+```
+
+Process resumes:
+
+```bash
+python cli.py process resume.pdf
+python cli.py process resume1.pdf resume2.jpg --copy-to-uploads
+```
+
+Use `--no-embedding` if you want a quick offline demo without loading the sentence-transformers model:
+
+```bash
+python cli.py process resume.pdf --no-embedding
+```
+
+List, inspect, search, rank, and export candidates:
+
+```bash
+python cli.py list
+python cli.py show 1
+python cli.py search "react node"
+python cli.py rank --jd "Need a Python developer with SQL and Docker"
+python cli.py export -o candidates_export.json
+```
+
+The CLI uses the same local SQLite database, resume extraction, parsing, and ranking modules as the Streamlit app.
+
+---
+
 ## 📖 Usage Guide
 
 ### 1. Upload Resumes
