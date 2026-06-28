@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AI-powered Applicant Tracking System that works 100% offline. Parse resumes, rank candidates, and search talent — no internet required after first load.">
+  <meta name="theme-color" content="#6c5ce7">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <title>Offline ATS — AI Resume Tracker</title>
+
+  <link rel="manifest" href="/manifest.json">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div id="toast-container" class="toast-container"></div>
+
+  <div class="app-container">
+
+    <!-- Install Banner -->
+    <div id="install-banner" class="install-banner">
+      <p>📲 Install Offline ATS for a native app experience — works without internet!</p>
+      <div style="display:flex;gap:0.5rem;align-items:center;">
+        <button id="install-btn" class="btn">Install App</button>
+        <button id="dismiss-install" class="dismiss-btn">&times;</button>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <div class="header-icon">📋</div>
+        <div>
+          <h1>Offline ATS</h1>
+          <p>AI-powered Resume Tracker — works offline</p>
+        </div>
+      </div>
+      <div id="status-badge" class="status-badge status-online">
+        <span class="status-dot"></span> Online
+      </div>
+    </header>
+
+    <!-- Stats -->
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-icon purple">👥</div>
+        <div>
+          <div class="stat-value" id="stat-candidates">0</div>
+          <div class="stat-label">Candidates</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon teal">🛠️</div>
+        <div>
+          <div class="stat-value" id="stat-skills">0</div>
+          <div class="stat-label">Unique Skills</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon orange">📄</div>
+        <div>
+          <div class="stat-value" id="stat-resumes">0</div>
+          <div class="stat-label">Resumes Parsed</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="upload">📤 Upload</button>
+      <button class="tab-btn" data-tab="candidates">👥 Candidates</button>
+      <button class="tab-btn" data-tab="match">🎯 Match JD</button>
+      <button class="tab-btn" data-tab="search">🔍 Search</button>
+    </div>
+
+    <!-- ═══════════ Upload Panel ═══════════ -->
+    <div id="panel-upload" class="tab-panel active">
+      <div id="upload-zone" class="upload-zone">
+        <div class="icon">📤</div>
+        <h3>Drop PDF resumes here or click to browse</h3>
+        <p>Supports multiple files · Parsed entirely in your browser · No data leaves your device</p>
+      </div>
+      <input type="file" id="file-input" accept=".pdf" multiple>
+      <div id="process-log" class="process-log"></div>
+    </div>
+
+    <!-- ═══════════ Candidates Panel ═══════════ -->
+    <div id="panel-candidates" class="tab-panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+        <h2 style="font-size:1.2rem;font-weight:700;">All Candidates</h2>
+        <button id="clear-all-btn" class="btn btn-danger">🗑 Clear All</button>
+      </div>
+      <div id="candidates-list"></div>
+    </div>
+
+    <!-- ═══════════ Match Panel ═══════════ -->
+    <div id="panel-match" class="tab-panel">
+      <div class="match-section">
+        <div class="input-group">
+          <label for="jd-input">Job Description</label>
+          <textarea id="jd-input" placeholder="Paste the job description here to rank candidates against it..."></textarea>
+        </div>
+        <button id="match-btn" class="btn btn-primary">🎯 Rank Candidates</button>
+      </div>
+      <div id="match-results"></div>
+    </div>
+
+    <!-- ═══════════ Search Panel ═══════════ -->
+    <div id="panel-search" class="tab-panel">
+      <div class="search-container">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-input" placeholder="Search by name, skill, company, or keyword...">
+      </div>
+      <div id="search-results"></div>
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="/js/db.js"></script>
+  <script src="/js/parser.js"></script>
+  <script src="/js/matcher.js"></script>
+  <script src="/js/app.js"></script>
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('[SW] Registered:', reg.scope))
+        .catch(err => console.warn('[SW] Registration failed:', err));
+    }
+  </script>
+</body>
+</html>
