@@ -1,0 +1,18 @@
+
+Collecting usage statistics. To deactivate, set browser.gatherUsageStats to false.
+
+
+  You can now view your Streamlit app in your browser.
+
+  Local URL: http://localhost:8501
+  Network URL: http://192.168.98.116:8501
+  External URL: http://183.82.127.20:8501
+
+[DB] Database initialized at C:\Users\user\OneDrive\Desktop\offline-ATS\offline_ats\database\ats.db
+[DB] Database initialized at C:\Users\user\OneDrive\Desktop\offline-ATS\offline_ats\database\ats.db
+[DB] Database initialized at C:\Users\user\OneDrive\Desktop\offline-ATS\offline_ats\database\ats.db
+[Extractor] PDF: Extracted 2280 chars from C:\Users\user\OneDrive\Desktop\offline-ATS\offline_ats\uploaded_resumes\Varshhene_Resume.pdf
+[LLM] Ollama API error: 404 - {"error":"model 'phi3:mini' not found"}
+[LLM] Model not found at C:\Users\user\OneDrive\Desktop\offline-ATS\offline_ats\models\Phi-3-mini-4k-instruct-q4.gguf
+[LLM] LLM parsing failed or unavailable, using rule-based fallback
+[Embedder] Loading model: all-MiniLM-L6-v2

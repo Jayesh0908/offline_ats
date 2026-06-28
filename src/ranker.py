@@ -12,6 +12,7 @@ Ranks candidates against a job description using a hybrid score:
 import json
 import numpy as np
 import logging
+import re
 from typing import Optional
 
 logger = logging.getLogger(__name__)
@@ -67,7 +68,11 @@ def extract_skills_from_jd(jd_text: str) -> list[str]:
         List of matched skill strings (lowercased).
     """
     jd_lower = jd_text.lower()
-    found = [skill for skill in TECH_SKILLS_VOCABULARY if skill in jd_lower]
+    found = [
+        skill
+        for skill in TECH_SKILLS_VOCABULARY
+        if re.search(rf"(?<![\w+#.]){re.escape(skill)}(?![\w+#.])", jd_lower)
+    ]
     return found
 
 

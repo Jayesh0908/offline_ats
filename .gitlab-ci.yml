@@ -1,0 +1,54 @@
+stages:
+  - build
+  - release
+
+variables:
+  GRADLE_USER_HOME: "$CI_PROJECT_DIR/.gradle"
+  ATS_SERVER_URL: "http://10.0.2.2:8501"
+
+android_apk:
+  image: gradle:8.7-jdk17
+  stage: build
+  before_script:
+    - apt-get update
+    - apt-get install -y wget unzip
+    - wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O android-tools.zip
+    - mkdir -p "$CI_PROJECT_DIR/android-sdk/cmdline-tools"
+    - unzip -q android-tools.zip -d "$CI_PROJECT_DIR/android-sdk/cmdline-tools"
+    - mv "$CI_PROJECT_DIR/android-sdk/cmdline-tools/cmdline-tools" "$CI_PROJECT_DIR/android-sdk/cmdline-tools/latest"
+    - export ANDROID_HOME="$CI_PROJECT_DIR/android-sdk"
+    - export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
+    - yes | sdkmanager --licenses >/dev/null
+    - sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+  script:
+    - cd android
+    - gradle assembleDebug -PatsServerUrl="$ATS_SERVER_URL"
+    - cd ..
+    - cp android/app/build/outputs/apk/debug/app-debug.apk Offline-ATS.apk
+  artifacts:
+    name: "Offline-ATS-$CI_COMMIT_REF_SLUG"
+    paths:
+      - Offline-ATS.apk
+    expire_in: 30 days
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: $CI_PIPELINE_SOURCE == "web"
+
+release_apk:
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  stage: release
+  needs:
+    - job: android_apk
+      artifacts: true
+  script:
+    - echo "Publishing APK release"
+  release:
+    tag_name: "$CI_COMMIT_TAG"
+    name: "Offline ATS $CI_COMMIT_TAG"
+    description: "Includes Offline-ATS.apk as a release asset."
+    assets:
+      links:
+        - name: "Offline-ATS.apk"
+          url: "$CI_PROJECT_URL/-/jobs/artifacts/$CI_COMMIT_TAG/raw/Offline-ATS.apk?job=android_apk"
+  rules:
+    - if: $CI_COMMIT_TAG

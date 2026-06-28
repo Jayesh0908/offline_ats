@@ -4,6 +4,7 @@ Computes embedding similarity and skill match scores.
 """
 import json
 import numpy as np
+import re
 from typing import List, Dict, Any, Tuple
 from dataclasses import dataclass
 import config
@@ -90,11 +91,11 @@ def extract_skills_from_jd(jd_text: str) -> List[str]:
     jd_lower = jd_text.lower()
     
     for skill in common_skills:
-        if skill.lower() in jd_lower:
+        skill_lower = skill.lower()
+        if re.search(rf"(?<![\w+#.]){re.escape(skill_lower)}(?![\w+#.])", jd_lower):
             found_skills.append(skill)
     
     # Also check lines starting with dash, bullet, or after "Skills:" 
-    import re
     skills_section = re.search(
         r'(?:skills|requirements|qualifications|technologies)[:\s]*(.+?)(?:\n\n|\Z)',
         jd_text, re.IGNORECASE | re.DOTALL

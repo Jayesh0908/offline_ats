@@ -111,7 +111,27 @@ TESSERACT_CMD = r"C:\Program Files\Tesseract-OCR\tesseract.exe"  # Windows defau
 streamlit run app.py
 ```
 
-The app will open in your browser at `http://localhost:8501`.
+The app will open in your browser at `http://localhost:8501`. The included Streamlit config also binds to `0.0.0.0`, so phones on the same Wi-Fi can open it with your computer's LAN address, for example `http://192.168.1.25:8501`.
+
+---
+
+## 📱 Mobile APK
+
+This repository includes an Android WebView wrapper in `android/`. The APK is a mobile client for the Streamlit ATS server.
+
+1. Start the ATS on your computer:
+   ```bash
+   streamlit run app.py
+   ```
+2. Find your computer's LAN IP address.
+3. Open the APK on your phone and enter `http://YOUR-LAN-IP:8501`.
+
+For release builds:
+
+- GitLab: create a tag such as `v1.0.0`; `.gitlab-ci.yml` builds `Offline-ATS.apk` and attaches it to the release.
+- GitHub mirror: push a `v*` tag or run the `Android APK` workflow manually; the APK is uploaded as an artifact and attached to tagged releases.
+
+The default APK URL can be changed during CI with `ATS_SERVER_URL` on GitLab or the `ats_server_url` workflow input on GitHub. For a real phone, use your computer's LAN URL instead of the emulator default `http://10.0.2.2:8501`.
 
 ---
 

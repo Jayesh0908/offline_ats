@@ -30,6 +30,10 @@ st.set_page_config(
 # Custom CSS
 st.markdown("""
 <style>
+    .block-container {
+        padding-top: 1.25rem;
+        padding-bottom: 2rem;
+    }
     .main-header {
         font-size: 2.5rem;
         font-weight: 700;
@@ -86,6 +90,40 @@ st.markdown("""
     }
     .stProgress > div > div > div > div {
         background-color: #1E88E5;
+    }
+    @media (max-width: 768px) {
+        .block-container {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        .main-header {
+            font-size: 1.8rem;
+            line-height: 1.2;
+        }
+        .sub-header {
+            font-size: 1rem;
+            margin-bottom: 1.25rem;
+        }
+        .candidate-card {
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+        }
+        .stat-number {
+            font-size: 1.5rem;
+        }
+        .skill-badge {
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
+        div[data-testid="stTextInput"] input,
+        div[data-testid="stTextArea"] textarea,
+        div[data-testid="stSelectbox"] input {
+            font-size: 16px;
+        }
+        .stButton > button,
+        .stDownloadButton > button {
+            min-height: 44px;
+        }
     }
 </style>
 """, unsafe_allow_html=True)
