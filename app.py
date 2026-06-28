@@ -401,11 +401,17 @@ def render_ranking_tab():
         return
     
     st.info(f"📊 {count} candidate(s) available for ranking")
-    
-    jd_text = st.text_area(
-        "Job Description",
-        height=250,
-        placeholder="""Example:
+
+    if "job_description" not in st.session_state:
+        st.session_state.job_description = ""
+
+    with st.form("rank_candidates_form", clear_on_submit=False):
+        jd_text = st.text_area(
+            "Job Description",
+            key="job_description",
+            value=st.session_state.job_description,
+            height=250,
+            placeholder="""Example:
 Need a Full Stack Developer.
 
 Skills:
@@ -421,22 +427,23 @@ Responsibilities:
 - Build and maintain web applications
 - Work with cross-functional teams
 - Write clean, scalable code""",
-        help="Enter the job description to find the best matching candidates"
-    )
-    
-    if st.button("🔍 Rank Candidates", type="primary", use_container_width=True):
+            help="Enter the job description to find the best matching candidates"
+        )
+        submitted = st.form_submit_button("🔍 Rank Candidates", type="primary", use_container_width=True)
+
+    if submitted:
         if not jd_text.strip():
             st.error("Please enter a job description")
             return
-        
+
         with st.spinner("Ranking candidates..."):
             results = rank_candidates(jd_text)
             st.session_state.rank_results = results
-        
+
         if not results:
             st.warning("No candidates to rank")
             return
-        
+
         st.success(f"Ranked {len(results)} candidate(s)")
     
     # Display ranking results
@@ -494,21 +501,29 @@ def render_search_tab():
         st.warning("No candidates in database. Upload resumes first.")
         return
     
-    search_query = st.text_input(
-        "Search Query",
-        placeholder="e.g., Candidates with React and Node experience",
-        help="Search using natural language or keywords"
-    )
-    
-    col1, col2 = st.columns([1, 5])
-    with col1:
-        search_type = st.selectbox("Method", ["Hybrid", "Semantic", "Keyword"])
-    
-    if st.button("🔍 Search", type="primary", use_container_width=True):
+    if "search_query" not in st.session_state:
+        st.session_state.search_query = ""
+
+    with st.form("search_candidates_form", clear_on_submit=False):
+        search_query = st.text_input(
+            "Search Query",
+            key="search_query",
+            value=st.session_state.search_query,
+            placeholder="e.g., Candidates with React and Node experience",
+            help="Search using natural language or keywords"
+        )
+
+        col1, col2 = st.columns([1, 5])
+        with col1:
+            search_type = st.selectbox("Method", ["Hybrid", "Semantic", "Keyword"])
+
+        submitted = st.form_submit_button("🔍 Search", type="primary", use_container_width=True)
+
+    if submitted:
         if not search_query.strip():
             st.error("Please enter a search query")
             return
-        
+
         with st.spinner("Searching..."):
             if search_type == "Keyword":
                 results = [dict(r) for r in search_candidates_fts(search_query)]
@@ -518,7 +533,7 @@ def render_search_tab():
             else:
                 results = search_candidates(search_query)
                 st.session_state.search_results = results
-        
+
         if not st.session_state.search_results:
             st.warning("No matching candidates found")
         else:
