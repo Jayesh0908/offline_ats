@@ -4,6 +4,7 @@
 **Sprint Duration:** 1 week  
 **Start Date:** 2026-06-28  
 **End Date:** 2026-07-05  
+**Team:** Jayesh (Backend / AI Pipeline) · Ramya (Database / UI / Testing)  
 
 ---
 
@@ -28,8 +29,8 @@
 ### ISSUE-001 · Initialize Git Repository & Project Structure
 
 - **Type:** `infra`
-- **Assignee:** Jayesh
-- **Estimate:** 1 hour
+- **Assignee:** Jayesh (README, SPEC, directory structure) · Ramya (ISSUES.md, WORK_DIVISION.md)
+- **Estimate:** 1 hour each
 - **Due Date:** 2026-06-28
 - **Priority:** 🔴 Critical
 
@@ -57,7 +58,7 @@ Set up the GitLab repository with the correct project structure.
 ### ISSUE-002 · Write requirements.txt and Environment Setup Guide
 
 - **Type:** `infra`
-- **Assignee:** Jayesh
+- **Assignee:** Jayesh (requirements.txt, .gitignore) · Ramya (Tesseract + model download docs)
 - **Estimate:** 1 hour
 - **Due Date:** 2026-06-28
 - **Priority:** 🔴 Critical
@@ -86,7 +87,7 @@ Define all Python dependencies and create a one-command setup guide.
 
 - **Type:** `feature`
 - **Assignee:** Jayesh
-- **Estimate:** 3 hours
+- **Estimate:** 4 hours
 - **Due Date:** 2026-06-29
 - **Priority:** 🔴 Critical
 
@@ -111,8 +112,8 @@ Build `src/extractor.py` to handle PDF and image resume text extraction.
 ### ISSUE-004 · Implement SQLite Database Module
 
 - **Type:** `feature`
-- **Assignee:** Jayesh
-- **Estimate:** 2 hours
+- **Assignee:** Ramya
+- **Estimate:** 4 hours
 - **Due Date:** 2026-06-29
 - **Priority:** 🔴 Critical
 
@@ -168,8 +169,8 @@ Build `src/parser.py` to load a local GGUF model and parse resumes into structur
 ### ISSUE-006 · Implement Embedding Module
 
 - **Type:** `feature`
-- **Assignee:** Jayesh
-- **Estimate:** 2 hours
+- **Assignee:** Ramya
+- **Estimate:** 3 hours
 - **Due Date:** 2026-06-30
 - **Priority:** 🟡 High
 
@@ -199,7 +200,7 @@ Build `src/embedder.py` for generating and managing sentence embeddings.
 
 - **Type:** `feature`
 - **Assignee:** Jayesh
-- **Estimate:** 4 hours
+- **Estimate:** 5 hours
 - **Due Date:** 2026-07-01
 - **Priority:** 🔴 Critical
 
@@ -225,9 +226,9 @@ Build `src/ranker.py` with hybrid embedding + skill match scoring.
 ### ISSUE-008 · Implement Search Feature
 
 - **Type:** `feature`
-- **Assignee:** Jayesh
-- **Estimate:** 2 hours
-- **Due Date:** 2026-07-02
+- **Assignee:** Ramya
+- **Estimate:** 3.5 hours
+- **Due Date:** 2026-07-01
 - **Priority:** 🟡 High
 
 **Description:**
@@ -281,7 +282,7 @@ Build the Upload Resumes tab in Streamlit that orchestrates the full processing 
 
 - **Type:** `feature`
 - **Assignee:** Jayesh
-- **Estimate:** 3 hours
+- **Estimate:** 3.5 hours
 - **Due Date:** 2026-07-03
 - **Priority:** 🔴 Critical
 
@@ -306,8 +307,8 @@ Build the Rank Candidates tab showing JD input and ranked results.
 ### ISSUE-011 · Build Search & Candidate Management UI Tabs
 
 - **Type:** `feature`
-- **Assignee:** Jayesh
-- **Estimate:** 3 hours
+- **Assignee:** Ramya
+- **Estimate:** 3.5 hours
 - **Due Date:** 2026-07-03
 - **Priority:** 🟡 High
 
@@ -336,8 +337,8 @@ Build Search tab and All Candidates tab.
 ### ISSUE-012 · Write Unit and Integration Tests
 
 - **Type:** `testing`
-- **Assignee:** Jayesh
-- **Estimate:** 4 hours
+- **Assignee:** Jayesh (test_extractor, test_parser, integration) · Ramya (test_ranker, coverage report)
+- **Estimate:** 4 hours each
 - **Due Date:** 2026-07-04
 - **Priority:** 🟡 High
 
@@ -357,8 +358,8 @@ Build Search tab and All Candidates tab.
 ### ISSUE-013 · Final Documentation & Cleanup
 
 - **Type:** `docs`
-- **Assignee:** Jayesh
-- **Estimate:** 2 hours
+- **Assignee:** Ramya
+- **Estimate:** 3.5 hours
 - **Due Date:** 2026-07-05
 - **Priority:** 🟢 Medium
 
@@ -375,22 +376,22 @@ Build Search tab and All Candidates tab.
 
 | Issue | Title | Assignee | Estimate | Due Date | Priority |
 |---|---|---|---|---|---|
-| ISSUE-001 | Initialize Repo & Project Structure | Jayesh | 1h | 2026-06-28 | 🔴 Critical |
-| ISSUE-002 | requirements.txt & Setup Guide | Jayesh | 1h | 2026-06-28 | 🔴 Critical |
-| ISSUE-003 | Text Extraction Module | Jayesh | 3h | 2026-06-29 | 🔴 Critical |
-| ISSUE-004 | SQLite Database Module | Jayesh | 2h | 2026-06-29 | 🔴 Critical |
-| ISSUE-005 | LLM Resume Parser | Jayesh | 5h | 2026-06-30 | 🔴 Critical |
-| ISSUE-006 | Embedding Module | Jayesh | 2h | 2026-06-30 | 🟡 High |
-| ISSUE-007 | Candidate Ranking Engine | Jayesh | 4h | 2026-07-01 | 🔴 Critical |
-| ISSUE-008 | Search Feature | Jayesh | 2h | 2026-07-02 | 🟡 High |
-| ISSUE-009 | Streamlit Upload UI | Jayesh | 4h | 2026-07-02 | 🔴 Critical |
-| ISSUE-010 | Ranking UI Tab | Jayesh | 3h | 2026-07-03 | 🔴 Critical |
-| ISSUE-011 | Search & Management UI | Jayesh | 3h | 2026-07-03 | 🟡 High |
-| ISSUE-012 | Unit & Integration Tests | Jayesh | 4h | 2026-07-04 | 🟡 High |
-| ISSUE-013 | Final Docs & Cleanup | Jayesh | 2h | 2026-07-05 | 🟢 Medium |
+| ISSUE-001 | Initialize Repo & Project Structure | Jayesh + Ramya | 1h each | 2026-06-28 | 🔴 Critical |
+| ISSUE-002 | requirements.txt & Setup Guide | Jayesh + Ramya | 1h | 2026-06-28 | 🔴 Critical |
+| ISSUE-003 | Text Extraction Module | **Jayesh** | 4h | 2026-06-29 | 🔴 Critical |
+| ISSUE-004 | SQLite Database Module | **Ramya** | 4h | 2026-06-29 | 🔴 Critical |
+| ISSUE-005 | LLM Resume Parser | **Jayesh** | 5h | 2026-06-30 | 🔴 Critical |
+| ISSUE-006 | Embedding Module | **Ramya** | 3h | 2026-06-30 | 🟡 High |
+| ISSUE-007 | Candidate Ranking Engine | **Jayesh** | 5h | 2026-07-01 | 🔴 Critical |
+| ISSUE-008 | Search Feature Backend | **Ramya** | 3.5h | 2026-07-01 | 🟡 High |
+| ISSUE-009 | Streamlit Upload UI | **Jayesh** | 4h | 2026-07-02 | 🔴 Critical |
+| ISSUE-010 | Ranking UI Tab | **Jayesh** | 3.5h | 2026-07-03 | 🔴 Critical |
+| ISSUE-011 | Search & Management UI | **Ramya** | 3.5h | 2026-07-03 | 🟡 High |
+| ISSUE-012 | Unit & Integration Tests | Jayesh + Ramya | 4h each | 2026-07-04 | 🟡 High |
+| ISSUE-013 | Final Docs & Cleanup | **Ramya** | 3.5h | 2026-07-05 | 🟢 Medium |
 
-**Total Estimated Effort:** ~36 hours
+**Total Estimated Effort:** ~51.5 hours (~28.5h Jayesh · ~23h Ramya)
 
 ---
 
-*Last Updated: 2026-06-28*
+*Last Updated: 2026-06-28 — Team: Jayesh & Ramya*
