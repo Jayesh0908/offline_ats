@@ -80,6 +80,22 @@ Existing ATS platforms (Greenhouse, Lever, Workday) send candidate data to cloud
 
 ---
 
+## ⚙️ CPU & Runtime Declaration
+
+> **Hackathon Compliance:** This project is CPU-first. No GPU, no CUDA, no cloud inference.
+
+| Component | Model | Runtime | CPU Optimisation |
+|---|---|---|---|
+| **Resume Parser (LLM)** | `Phi-3-mini-4k-instruct` Q4_K_M GGUF | `llama-cpp-python` (llama.cpp backend) | 4-bit quantised — runs on any x86/ARM CPU; uses all cores via `n_threads=os.cpu_count()` |
+| **Fallback LLM** | `Qwen2.5-1.5B-Instruct` Q4_K_M GGUF | `llama-cpp-python` | Lighter model (~1 GB) for low-memory devices |
+| **Embeddings** | `all-MiniLM-L6-v2` | `sentence-transformers` (PyTorch CPU) | 384-dim model, ~80 MB, no GPU required |
+| **OCR** | Tesseract 5.x | `pytesseract` wrapper | Pure CPU; LSTM-based engine |
+| **PDF Parsing** | — | `PyMuPDF` (`fitz`) | Native C library, zero ML overhead |
+
+**No external API calls are made at any point.** All inference runs in-process on the local CPU. The app is fully functional with Wi-Fi turned off.
+
+---
+
 ## 📂 Project Structure
 
 ```
@@ -292,13 +308,16 @@ numpy>=1.26.0
 
 | Name | Role |
 |---|---|
-| Jayesh | Lead Developer / Backend / LLM Integration |
+| Jayesh | Backend / AI Pipeline — Text Extraction, LLM Parser, Ranking Engine, Upload UI |
+| Ramya | Data & Frontend — SQLite DB, Embeddings, Search, Candidate Management UI, Docs |
 
 ---
 
 ## 📄 License
 
-MIT License — see [LICENSE](LICENSE) for details.
+This project is licensed under the **GNU General Public License v3.0** (GPL-3.0) — see [LICENSE](LICENSE) for details.
+
+This is a **strong copyleft** license: any derivative work must also be distributed under GPL-3.0.
 
 ---
 
