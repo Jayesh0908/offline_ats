@@ -1,93 +1,312 @@
-# Offline_ATS
+# 🧠 Offline ATS — Applicant Tracking System
 
+> **An offline-first, AI-powered Applicant Tracking System that runs entirely on your local machine — no internet required, no external APIs, 100% private.**
 
+---
 
-## Getting started
+## 🌟 Overview
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+**Offline ATS** is a fully local Applicant Tracking System built for recruiters who need AI-powered resume parsing and candidate ranking without sending any data to external services. All inference runs on-device using local LLMs (GGUF format), local embeddings, and local SQLite storage.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+| Feature | Status |
+|---|---|
+| PDF & Image Resume Upload | ✅ |
+| OCR Text Extraction (Tesseract) | ✅ |
+| Local LLM Resume Parsing | ✅ |
+| SQLite Persistent Storage | ✅ |
+| Semantic Embedding Search | ✅ |
+| Job Description Matching & Ranking | ✅ |
+| Skill-based Filtering | ✅ |
+| 100% Offline / No External APIs | ✅ |
+| CPU-only Inference | ✅ |
 
-## Add your files
+---
 
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+## 🎯 Problem Statement
+
+Existing ATS platforms (Greenhouse, Lever, Workday) send candidate data to cloud services, raising **privacy concerns** and requiring **internet connectivity**. Small teams, defense orgs, legal firms, or privacy-conscious companies need a fully local alternative.
+
+**Offline ATS** solves this by:
+- Running AI parsing with a local GGUF language model (Phi-3 Mini / Qwen2.5)
+- Using `all-MiniLM-L6-v2` for local semantic embeddings
+- Storing everything in a local SQLite database
+- Providing a clean Streamlit UI for recruiters
+
+---
+
+## 🏗️ Architecture
 
 ```
-cd existing_repo
-git remote add origin https://code.swecha.org/Jayesh2026/offline_ats.git
-git branch -M main
-git push -uf origin main
+┌─────────────────────────────────────────────────────────────┐
+│                        Streamlit UI                         │
+└────────────┬─────────────────────────────────┬─────────────┘
+             │                                 │
+   ┌─────────▼──────────┐           ┌──────────▼──────────┐
+   │   Resume Upload     │           │  Job Description    │
+   │  (PDF / PNG / JPG) │           │      Input          │
+   └─────────┬──────────┘           └──────────┬──────────┘
+             │                                 │
+   ┌─────────▼──────────┐           ┌──────────▼──────────┐
+   │  Text Extraction    │           │  Embedding Model    │
+   │ PyMuPDF / Tesseract│           │  all-MiniLM-L6-v2  │
+   └─────────┬──────────┘           └──────────┬──────────┘
+             │                                 │
+   ┌─────────▼──────────┐           ┌──────────▼──────────┐
+   │   Local LLM         │           │   Cosine Similarity  │
+   │  Phi-3 Mini GGUF   │           │    + Skill Match     │
+   │  (llama.cpp)        │           └──────────┬──────────┘
+   └─────────┬──────────┘                       │
+             │                       ┌──────────▼──────────┐
+   ┌─────────▼──────────┐           │   Ranked Candidates  │
+   │  SQLite Database    │◄──────────│   (Final Score %)   │
+   │  (candidates table)│           └─────────────────────┘
+   └────────────────────┘
 ```
 
-## Integrate with your tools
+---
 
-* [Set up project integrations](https://code.swecha.org/Jayesh2026/offline_ats/-/settings/integrations)
+## 🔧 Tech Stack
 
-## Collaborate with your team
+| Layer | Technology |
+|---|---|
+| **Frontend** | Streamlit |
+| **Database** | SQLite (via Python `sqlite3`) |
+| **PDF Extraction** | PyMuPDF (`fitz`) |
+| **OCR (Images)** | Tesseract OCR + `pytesseract` |
+| **Local LLM** | Phi-3 Mini GGUF or Qwen2.5-1.5B GGUF via `llama-cpp-python` |
+| **Embeddings** | `sentence-transformers` — `all-MiniLM-L6-v2` |
+| **Similarity** | Cosine Similarity (`sklearn` / `numpy`) |
+| **Language** | Python 3.10+ |
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+---
 
-## Test and Deploy
+## 📂 Project Structure
 
-Use the built-in continuous integration in GitLab.
+```
+offline_ats/
+├── app.py                    # Streamlit main application
+├── requirements.txt          # Python dependencies
+├── README.md                 # This file
+├── SPEC.md                   # Technical specification
+├── ISSUES.md                 # Issue tracker / sprint plan
+├── WORK_DIVISION.md          # Team work-division plan
+│
+├── models/
+│   └── phi3-mini.gguf        # Local GGUF model (downloaded separately)
+│
+├── data/
+│   └── ats.db                # SQLite database (auto-created)
+│
+├── uploads/                  # Uploaded resume files (auto-created)
+│
+├── src/
+│   ├── __init__.py
+│   ├── extractor.py          # PDF + OCR text extraction
+│   ├── parser.py             # LLM-based JSON resume parser
+│   ├── embedder.py           # Sentence-transformer embedding
+│   ├── database.py           # SQLite CRUD operations
+│   ├── ranker.py             # Cosine similarity + skill match scoring
+│   └── utils.py              # Shared helpers
+│
+└── tests/
+    ├── test_extractor.py
+    ├── test_parser.py
+    ├── test_ranker.py
+    └── sample_resumes/       # Sample PDFs for testing
+```
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
+---
 
-***
+## ⚡ Quick Start
 
-# Editing this README
+### Prerequisites
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+- Python 3.10+
+- [Tesseract OCR](https://github.com/UB-Mannheim/tesseract/wiki) installed and added to PATH
+- ~2 GB disk space for the GGUF model
 
-## Suggestions for a good README
+### 1. Clone the repository
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+```bash
+git clone https://code.swecha.org/Jayesh2026/offline_ats.git
+cd offline_ats
+```
 
-## Name
-Choose a self-explaining name for your project.
+### 2. Create a virtual environment
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+```bash
+python -m venv venv
+# Windows
+venv\Scripts\activate
+# Linux/macOS
+source venv/bin/activate
+```
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+### 3. Install dependencies
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+```bash
+pip install -r requirements.txt
+```
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+### 4. Download the local LLM model
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+```bash
+# Option A: Phi-3 Mini (recommended, ~2.3 GB)
+# Download from HuggingFace:
+# https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-gguf
+# Place the .gguf file inside models/
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+# Option B: Qwen2.5-1.5B (lighter, ~1 GB)
+# https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF
+```
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+### 5. Run the application
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+```bash
+streamlit run app.py
+```
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+Open your browser at `http://localhost:8501`
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+---
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+## 🖥️ Usage
 
-## License
-For open source projects, say how it is licensed.
+### Upload Resumes
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+1. Navigate to the **Upload Resumes** tab
+2. Drag-and-drop or browse for PDF/PNG/JPG files
+3. Click **Process Resumes** — the app extracts text, parses structured data via LLM, and stores everything locally
+
+### Rank Candidates
+
+1. Navigate to the **Rank Candidates** tab
+2. Paste your job description in the text area
+3. Click **Find Best Matches**
+4. View ranked candidates with match scores
+
+### Search Candidates
+
+1. Navigate to the **Search** tab
+2. Type a natural language query (e.g., `Python developers with 3+ years ML experience`)
+3. Results are ranked by semantic similarity
+
+---
+
+## 🧮 Scoring Algorithm
+
+The final candidate ranking score is computed as:
+
+$$\text{Final Score} = 0.6 \times \text{Embedding Similarity} + 0.4 \times \text{Skill Match}$$
+
+**Embedding Similarity** — cosine similarity between the job description embedding and the candidate's resume embedding (semantic relevance).
+
+**Skill Match** — fraction of required skills found in candidate's skill list:
+$$\text{Skill Match} = \frac{|\text{Candidate Skills} \cap \text{Required Skills}|}{|\text{Required Skills}|}$$
+
+---
+
+## 🗄️ Database Schema
+
+```sql
+CREATE TABLE candidates (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    name        TEXT,
+    email       TEXT,
+    phone       TEXT,
+    skills      TEXT,          -- JSON array
+    education   TEXT,          -- JSON array
+    experience  TEXT,          -- JSON array
+    projects    TEXT,          -- JSON array
+    resume_path TEXT,
+    raw_text    TEXT,
+    json_data   TEXT,          -- Full parsed JSON
+    embedding   BLOB,          -- Serialized numpy float32 array
+    created_at  DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+---
+
+## 📋 LLM Prompt Template
+
+```
+You are a resume parser. Extract the following fields from the resume text below and return ONLY valid JSON — no explanation, no markdown, no extra text.
+
+Fields to extract:
+- name (string)
+- email (string)
+- phone (string)
+- skills (array of strings)
+- education (array of objects: degree, college)
+- experience (array of objects: company, role, years)
+- projects (array of strings)
+
+Resume Text:
+{resume_text}
+
+Return JSON only:
+```
+
+---
+
+## 📦 Requirements
+
+```
+streamlit>=1.35.0
+pymupdf>=1.24.0
+pytesseract>=0.3.10
+Pillow>=10.0.0
+llama-cpp-python>=0.2.0
+sentence-transformers>=3.0.0
+scikit-learn>=1.4.0
+numpy>=1.26.0
+```
+
+> Install all with: `pip install -r requirements.txt`
+
+---
+
+## 🔒 Privacy & Offline Guarantees
+
+- **Zero network calls** during inference or storage
+- All models run locally via `llama-cpp-python` (GGUF format)
+- Embeddings computed locally via `sentence-transformers`
+- SQLite database stays on your machine
+- Resume files stored in local `uploads/` directory
+
+---
+
+## 🗺️ Roadmap
+
+- [ ] **Phase 1** — Project spec, planning, repo setup *(current)*
+- [ ] **Phase 2** — Core pipeline: extraction → parsing → storage
+- [ ] **Phase 3** — Embedding + ranking engine
+- [ ] **Phase 4** — Streamlit UI with all tabs
+- [ ] **Phase 5** — Testing, polish, documentation
+- [ ] **Future** — Export to CSV/PDF, bulk import, interview scheduling
+
+---
+
+## 👥 Team
+
+| Name | Role |
+|---|---|
+| Jayesh | Lead Developer / Backend / LLM Integration |
+
+---
+
+## 📄 License
+
+MIT License — see [LICENSE](LICENSE) for details.
+
+---
+
+## 🙏 Acknowledgements
+
+- [llama.cpp](https://github.com/ggerganov/llama.cpp) — GGUF model inference
+- [sentence-transformers](https://www.sbert.net/) — Local embeddings
+- [PyMuPDF](https://pymupdf.readthedocs.io/) — PDF text extraction
+- [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) — Image OCR
+- [Streamlit](https://streamlit.io/) — Rapid UI development
+- [Microsoft Phi-3](https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-gguf) — Local LLM
